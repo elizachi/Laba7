@@ -77,7 +77,7 @@ public class PostgreSqlDao implements DAO{
     @Override
     public boolean delete(int index) {
         String sql = null;
-        if(getSQL("id = ", index) != null) {
+        if(get(index) != null) {
             sql = DELETE_COMMAND + " WHERE " +
                     "id = " + index;
         }
@@ -150,15 +150,24 @@ public class PostgreSqlDao implements DAO{
     }
 
     private Coordinates getCoordinates(Object obj) {
-        return new Coordinates();
+        String arg = obj.toString();
+        int x = Integer.parseInt(arg.substring(arg.indexOf("(")+1, arg.indexOf(",")));
+        float y = Float.parseFloat(arg.substring(arg.indexOf(",")+1, arg.indexOf(")")));
+        return new Coordinates(x, y);
     }
 
     private Mood getMood(Object obj) {
-        return null;
+        if(obj == null) return null;
+        return Mood.valueOf(obj.toString());
     }
 
     private Car getCar(Object obj) {
-        return new Car();
+        String arg = obj.toString();
+        String substring = arg.substring(arg.indexOf("(") + 1, arg.indexOf(","));
+        String carName = Objects.equals(substring, "null") ?
+                null : substring;
+        boolean isCool = Objects.equals(arg.substring(arg.indexOf(",") + 1, arg.indexOf(")")), "true");
+        return new Car(carName, isCool);
     }
     public ArrayList<Integer> getAllSQL() {
         ArrayList<Integer> indexes = new ArrayList<>();
@@ -190,7 +199,7 @@ public class PostgreSqlDao implements DAO{
         try {
             stmt = connection.createStatement();
             stmt.executeUpdate(sql);
-        } catch(SQLException e) {
+        } catch(SQLException | NullPointerException e) {
             return false;
         }
         return true;
@@ -200,9 +209,6 @@ public class PostgreSqlDao implements DAO{
     }
     private String convertToSQL(Mood mood) {
         return (mood == null) ? null : "'"+mood.name()+"'";
-    }
-    private String convertToSQL(String strValue) {
-        return (strValue == null) ? null : "'"+strValue+"'";
     }
 
 }

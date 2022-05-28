@@ -79,18 +79,19 @@ public class ArrayDequeDAO implements DAO{
     }
 
     public void clear() {
+        if(humanCollection == null) return;
         humanCollection.clear();
     }
 
     public HumanBeing removeHead() {
         HumanBeing firstHuman = getHead();
-        humanCollection.removeFirst();
+        if(firstHuman != null) humanCollection.removeFirst();
         return firstHuman;
     }
 
     public HumanBeing removeLast() {
         HumanBeing lastHuman = getLast();
-        humanCollection.removeLast();
+        if(lastHuman != null) humanCollection.removeLast();
         return lastHuman;
     }
 

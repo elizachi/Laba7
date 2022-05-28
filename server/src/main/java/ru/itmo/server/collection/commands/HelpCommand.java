@@ -15,7 +15,7 @@ public class HelpCommand implements Command{
                 "exit                     - завершить программу (с сохранением в файл) \n" +
                 "head                     - вывести первый элемент коллекции \n" +
                 "remove_head              - вывести первый элемент коллекции и удалить его \n" +
-                "remove_greater {element} - удалить из коллекции все элементы, превышающие заданный \n" +
+                "remove_greater           - вывести последний элемент коллекции и удалить его \n" +
                 "filter_by_minutes_of_waiting minutesOfWaiting - вывести элементы, значение поля minutesOfWaiting которых равно заданному \n" +
                 "filter_greater_than_impact_speed impactSpeed  - вывести элементы, значение поля impactSpeed которых больше заданного \n" +
                 "print_unique_impact_speed - вывести уникальные значения поля impactSpeed всех элементов в коллекции \n");
