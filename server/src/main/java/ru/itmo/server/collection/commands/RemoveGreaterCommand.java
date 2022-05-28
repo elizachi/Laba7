@@ -1,23 +1,23 @@
 package ru.itmo.server.collection.commands;
 
-import ru.itmo.server.collection.dao.DAO;
+import ru.itmo.server.collection.dao.ArrayDequeDAO;
+import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 import java.util.ArrayList;
 
 public class RemoveGreaterCommand implements Command{
-    private final DAO arrayDequeDAO;
-
-    public RemoveGreaterCommand(DAO arrayDequeDAO) {
-        this.arrayDequeDAO = arrayDequeDAO;
-    }
+// TODO
+    private final PostgreSqlDao postgresqlDAO = new PostgreSqlDao();
 
     @Override
     public Object execute(Object arguments) {
-        ArrayList<Integer> indexes = arrayDequeDAO.getAllSQL();
+        ArrayList<Integer> indexes = postgresqlDAO.getAllSQL();
+
         if (indexes.size() != 0) {
-            Object result = arrayDequeDAO.getSQL("id = ", indexes.get(indexes.size() - 1)).stream().
+            Object result = postgresqlDAO.getSQL("id = ", indexes.get(indexes.size() - 1)).stream().
                     reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
-            arrayDequeDAO.deleteSQL(indexes.get(indexes.size() - 1));
+            postgresqlDAO.delete(indexes.get(indexes.size() - 1));
+            ArrayDequeDAO.getInstance().removeLast();
             return result;
         } else {
             return "Коллекция пустая.";

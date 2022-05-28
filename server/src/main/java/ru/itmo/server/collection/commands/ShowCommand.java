@@ -1,16 +1,13 @@
 package ru.itmo.server.collection.commands;
 
 import ru.itmo.server.collection.dao.DAO;
+import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 import java.util.ArrayList;
 
 public class ShowCommand implements Command{
-    private final DAO arrayDequeDAO;
-
-    public ShowCommand(DAO arrayDequeDAO) {
-        this.arrayDequeDAO = arrayDequeDAO;
-    }
-
+    // TODO
+    private final PostgreSqlDao arrayDequeDAO = new PostgreSqlDao();
     @Override
     public Object execute(Object arguments) {
         ArrayList<Integer> indexes = arrayDequeDAO.getAllSQL();

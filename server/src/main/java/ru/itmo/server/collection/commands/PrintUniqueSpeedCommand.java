@@ -1,24 +1,20 @@
 package ru.itmo.server.collection.commands;
 
-import ru.itmo.server.collection.dao.DAO;
+import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 import java.util.ArrayList;
 
 public class PrintUniqueSpeedCommand implements Command{
-    private final DAO arrayDequeDAO;
-
-    public PrintUniqueSpeedCommand(DAO arrayDequeDAO) {
-        this.arrayDequeDAO = arrayDequeDAO;
-    }
-
+    // TODO
+    private final PostgreSqlDao postgresqlDAO = new PostgreSqlDao();
     @Override
     public Object execute(Object arguments) {
-        ArrayList<Integer> indexes = arrayDequeDAO.getAllSQL();
+        ArrayList<Integer> indexes = postgresqlDAO.getAllSQL();
         ArrayList<Integer> uniqueImpactSpeed = new ArrayList<>();
         ArrayList<String> humans = new ArrayList<>();
         if (indexes.size() != 0) {
             for(int i : indexes) {
-                String human = arrayDequeDAO.getSQL("id = ", i).get(0);
+                String human = postgresqlDAO.getSQL("id = ", i).get(0);
                 int index_start = human.indexOf("impactSpeed = ") + 14;
                 int index_end = human.indexOf("\n", index_start);
                 int value = Integer.parseInt(human.substring(index_start, index_end));
@@ -29,7 +25,7 @@ public class PrintUniqueSpeedCommand implements Command{
                 }
             }
             for(Integer speed: uniqueImpactSpeed) {
-                humans.add(arrayDequeDAO.getSQL("impactSpeed = ", speed).get(0));
+                humans.add(postgresqlDAO.getSQL("impactSpeed = ", speed).get(0));
             }
         } else {
             return "Коллекция пустая.";

@@ -11,9 +11,7 @@ import java.sql.Statement;
 import java.util.*;
 
 public class PostgreSqlDao implements DAO{
-
     private final Connection connection;
-    private ArrayDeque<HumanBeing> humanCollection = new ArrayDeque<>();
     private final String COLLECTION_NAME = "HUMAN_BEING_COLLECTION";
     private final String ADD_COMMAND = "INSERT INTO "+ COLLECTION_NAME;
     private final String UPDATE_COMMAND = "UPDATE " + COLLECTION_NAME +" SET ";
@@ -31,7 +29,8 @@ public class PostgreSqlDao implements DAO{
     // TODO разобраться с айдишками
     // TODO разобраться с отправкой ответа на запрос
     @Override
-    public void addSQL(HumanBeing humanBeing) {
+    public int add(HumanBeing humanBeing) {
+        int id = 0;
         String sql = ADD_COMMAND + "(creationDate, name, soundtrackName, minutesOfWaiting," +
                 " impactSpeed, realHero, hasToothpick, coordinates, mood, car) VALUES (" +
                 "TO_DATE('"+humanBeing.getCreationDate().toString() + "', 'YYYY/MM/DD'), '" +
@@ -43,12 +42,19 @@ public class PostgreSqlDao implements DAO{
                 convertToSQL(humanBeing.isHasToothpick()) + ", '(" +
                 humanBeing.getCoordinates().getX() +", " + humanBeing.getCoordinates().getY()+ ")', " +
                 convertToSQL(humanBeing.getMood()) + ", '(" +
-                convertToSQL(humanBeing.getCar().getCarName()) + ", " + humanBeing.getCar().getCarCool() + ")')";
-        sendToDataBaseUpdate(sql);
-
+                humanBeing.getCar().getCarName() + ", " + humanBeing.getCar().getCarCool() + ")') " +
+                "RETURNING id";
+        try {
+            ResultSet result = sendToDataBaseQuery(sql);
+            result.next();
+            id = result.getInt("id");
+        } catch (SQLException e) {
+            id = -1;
+        }
+        return id;
     }
     @Override
-    public void updateSQL(HumanBeing humanBeing) {
+    public boolean update(HumanBeing humanBeing) {
         String sql = null;
         if(getSQL("id = ", humanBeing.getId()) != null) {
             sql = UPDATE_COMMAND + "name = '" + humanBeing.getName() + "' ," +
@@ -64,20 +70,19 @@ public class PostgreSqlDao implements DAO{
                     humanBeing.getCar().getCarCool() + ")' WHERE " +
                     "id = " + humanBeing.getId();
         }
-        sendToDataBaseUpdate(sql);
+        return sendToDataBaseUpdate(sql);
     }
 
     @Override
-    public void deleteSQL(int index) {
+    public boolean delete(int index) {
         String sql = null;
         if(getSQL("id = ", index) != null) {
             sql = DELETE_COMMAND + " WHERE " +
                     "id = " + index;
         }
-        sendToDataBaseUpdate(sql);
+        return sendToDataBaseUpdate(sql);
     }
 
-    @Override
     public ArrayList<String> getSQL(String column, Object obj) {
         String sql = GET_COMMAND + column + obj.toString();
         ResultSet result = sendToDataBaseQuery(sql);
@@ -130,15 +135,15 @@ public class PostgreSqlDao implements DAO{
         return result;
     }
 
-    private Statement sendToDataBaseUpdate(String sql) {
+    private boolean sendToDataBaseUpdate(String sql) {
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
             stmt.executeUpdate(sql);
         } catch(SQLException e) {
-            System.out.println("Случилась хуета");
+            return false;
         }
-        return stmt;
+        return true;
     }
     private String convertToSQL(Boolean boolValue) {
         return (boolValue == null) ? null : "'"+boolValue+"'";
@@ -148,11 +153,6 @@ public class PostgreSqlDao implements DAO{
     }
     private String convertToSQL(String strValue) {
         return (strValue == null) ? null : "'"+strValue+"'";
-    }
-
-    @Override
-    public int size() {
-        return humanCollection.size();
     }
 
 }

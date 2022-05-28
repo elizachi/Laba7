@@ -6,11 +6,13 @@ import ru.itmo.common.requests.Request;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.ServerLauncher;
 import ru.itmo.server.collection.commands.*;
+import ru.itmo.server.collection.dao.ArrayDequeDAO;
 import ru.itmo.server.collection.dao.DAO;
 import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 public class HandleCommands {
-    private static final DAO database = new PostgreSqlDao();
+    // TODO POSTGERSQL -> ARRAYDEQUE
+    private static final DAO database = new ArrayDequeDAO();
 
 //    public void exit() {
 //        try {
@@ -35,19 +37,19 @@ public class HandleCommands {
      * existed commands
      */
     private static final Command[] commands = {
-            new AddCommand(database),
-            new ClearCommand(database),
+            new AddCommand(),
+            new ClearCommand(),
             new ExitCommand(),
-            new FilterByMinutesCommand(database),
-            new FilterGreaterThanSpeedCommand(database),
-            new HeadCommand(database),
+            new FilterByMinutesCommand(),
+            new FilterGreaterThanSpeedCommand(),
+            new HeadCommand(),
             new HelpCommand(),
-            new InfoCommand(database),
-            new PrintUniqueSpeedCommand(database),
-            new RemoveByIdCommand(database),
-            new RemoveGreaterCommand(database),
-            new RemoveHeadCommand(database),
-            new ShowCommand(database),
-            new UpdateCommand(database),
+            new InfoCommand(),
+            new PrintUniqueSpeedCommand(),
+            new RemoveByIdCommand(),
+            new RemoveGreaterCommand(),
+            new RemoveHeadCommand(),
+            new ShowCommand(),
+            new UpdateCommand(),
     };
 }
