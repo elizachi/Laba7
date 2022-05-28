@@ -6,21 +6,8 @@ import ru.itmo.common.requests.Request;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.ServerLauncher;
 import ru.itmo.server.collection.commands.*;
-import ru.itmo.server.collection.dao.ArrayDequeDAO;
-import ru.itmo.server.collection.dao.DAO;
-import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 public class HandleCommands {
-    // TODO POSTGERSQL -> ARRAYDEQUE
-    private static final DAO database = new ArrayDequeDAO();
-
-//    public void exit() {
-//        try {
-//            database.save();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public Response handleRequest(Request request) {
         return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class));

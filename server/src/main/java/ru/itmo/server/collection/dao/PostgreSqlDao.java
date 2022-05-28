@@ -1,5 +1,7 @@
 package ru.itmo.server.collection.dao;
 
+import ru.itmo.common.model.Car;
+import ru.itmo.common.model.Coordinates;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.model.Mood;
 import ru.itmo.server.JDBC.JdbcManager;
@@ -9,9 +11,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class PostgreSqlDao implements DAO{
-    private final Connection connection;
+    private static Connection connection;
     private final String COLLECTION_NAME = "HUMAN_BEING_COLLECTION";
     private final String ADD_COMMAND = "INSERT INTO "+ COLLECTION_NAME;
     private final String UPDATE_COMMAND = "UPDATE " + COLLECTION_NAME +" SET ";
@@ -19,14 +22,12 @@ public class PostgreSqlDao implements DAO{
     private final String GET_COMMAND = "SELECT * FROM " + COLLECTION_NAME + " WHERE ";
     private final String GET_ID = "SELECT ID FROM " + COLLECTION_NAME;
 
-    public PostgreSqlDao() {
-        this.connection = JdbcManager.connectToDataBase();
+    public static void setConnection() {
+        connection = JdbcManager.connectToDataBase();
     }
-
     /**
      * override DAO methods
      */
-    // TODO разобраться с айдишками
     // TODO разобраться с отправкой ответа на запрос
     @Override
     public int add(HumanBeing humanBeing) {
@@ -109,7 +110,56 @@ public class PostgreSqlDao implements DAO{
         return rows;
     }
 
-    @Override
+    public Deque<HumanBeing> getAll() {
+        Deque<HumanBeing> humanCollection = new ConcurrentLinkedDeque<>();
+        ResultSet result = sendToDataBaseQuery(GET_ID);
+        try {
+            while(result.next()) {
+                int index = result.getInt("id");
+                humanCollection.add(get(index));
+            }
+        } catch (SQLException e) {
+            System.out.println("Бляяяяя проблема появилась :(");
+        }
+        return humanCollection;
+    }
+
+    public HumanBeing get(int id) {
+        String sql = GET_COMMAND + "id = " + id;
+        ResultSet result = sendToDataBaseQuery(sql);
+        HumanBeing human = null;
+        try {
+            while (result.next()) {
+                human = new HumanBeing(
+                         result.getString("name"),
+                         result.getString("soundtrackName"),
+                         result.getLong("minutesOfWaiting"),
+                         result.getInt("impactSpeed"),
+                         result.getBoolean("realHero"),
+                         result.getBoolean("hasToothpick"),
+                         getCoordinates(result.getObject("coordinates")),
+                         getMood(result.getObject("mood")),
+                         getCar(result.getObject("car")));
+                human.setId(result.getInt("id"));
+                human.setCreationDate(result.getDate("creationDate").toLocalDate());
+            }
+        } catch (SQLException e) {
+            System.out.println("Случилась еще одна хуета");
+        }
+        return human;
+    }
+
+    private Coordinates getCoordinates(Object obj) {
+        return new Coordinates();
+    }
+
+    private Mood getMood(Object obj) {
+        return null;
+    }
+
+    private Car getCar(Object obj) {
+        return new Car();
+    }
     public ArrayList<Integer> getAllSQL() {
         ArrayList<Integer> indexes = new ArrayList<>();
         String sql = GET_ID;

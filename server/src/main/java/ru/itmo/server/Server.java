@@ -5,6 +5,8 @@ import ru.itmo.common.exceptions.TypeOfError;
 import ru.itmo.common.exceptions.WrongArgumentException;
 import ru.itmo.common.requests.Request;
 import ru.itmo.common.responses.Response;
+import ru.itmo.server.collection.dao.ArrayDequeDAO;
+import ru.itmo.server.collection.dao.PostgreSqlDao;
 import ru.itmo.server.utility.HandleCommands;
 
 import java.io.IOException;
@@ -35,6 +37,10 @@ public class Server {
 
     public void start() {
         if(!runSocketChannel()) return;
+        PostgreSqlDao.setConnection();
+        ArrayDequeDAO.getInstance().setCollection(
+                new PostgreSqlDao().getAll()
+        );
         try {
             while(work) {
                 selector.select();

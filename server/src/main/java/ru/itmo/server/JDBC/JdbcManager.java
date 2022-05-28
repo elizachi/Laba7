@@ -16,6 +16,7 @@ public class JdbcManager {
      * @return
      */
     public static Connection connectToDataBase() {
+        ServerLauncher.log.info("Соединение с базой данных...");
         try {
             Class.forName(JDBC_DRIVER);
             connect = DriverManager

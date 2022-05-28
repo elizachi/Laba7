@@ -2,21 +2,13 @@ package ru.itmo.server.collection.dao;
 
 import ru.itmo.common.model.HumanBeing;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 public class ArrayDequeDAO implements DAO{
     private static volatile ArrayDequeDAO instance;
-    private Deque<HumanBeing> humanCollection = new ConcurrentLinkedDeque<>();
-    private static int availableId = 0;
-    private LocalDateTime initDate;
+    private Deque<HumanBeing> humanCollection;
 
-    public ArrayDequeDAO() {
-        initDate = LocalDateTime.now();
-    }
     public static ArrayDequeDAO getInstance() {
         if(instance == null) {
             synchronized (ArrayDequeDAO.class) {
@@ -27,6 +19,9 @@ public class ArrayDequeDAO implements DAO{
         }
         return instance;
     }
+    public void setCollection(Deque<HumanBeing> humans) {
+        humanCollection = humans;
+    }
 
     /**
      * override DAO methods
@@ -36,10 +31,6 @@ public class ArrayDequeDAO implements DAO{
     public int add(HumanBeing human) {
         humanCollection.add(human);
         return human.getId();
-    }
-
-    public String toString() {
-        return "размер "+humanCollection.size();
     }
 
     @Override
@@ -73,98 +64,48 @@ public class ArrayDequeDAO implements DAO{
         return false;
     }
 
-    @Override
-    public ArrayList<Integer> getAllSQL() {
-        return null;
+    public Deque<HumanBeing> getAll() {
+        return humanCollection;
+    }
+
+    public String showCollection(){
+        if (humanCollection.isEmpty()) return null;
+        return humanCollection.stream().reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
+    }
+
+    public List<?> filterByMinutes(Long minutesOfWaiting) {
+        return humanCollection.stream().filter(humanBeing -> Objects.equals(
+                humanBeing.getMinutesOfWaiting(), minutesOfWaiting)).collect(Collectors.toList());
     }
 
     public void clear() {
         humanCollection.clear();
     }
 
-    public void removeHead() {
+    public HumanBeing removeHead() {
+        HumanBeing firstHuman = getHead();
         humanCollection.removeFirst();
+        return firstHuman;
     }
 
-    public void removeLast() {
+    public HumanBeing removeLast() {
+        HumanBeing lastHuman = getLast();
         humanCollection.removeLast();
+        return lastHuman;
     }
-//
-//    @Override
-//    public List<?> filterGreaterThanSpeed(int speed){
-//        return humanCollection.stream().filter(humanBeing -> humanBeing.getImpactSpeed() > speed).collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public List<?> filterByMinutes(Long minutesOfWaiting) {
-//        return humanCollection.stream().filter(humanBeing -> Objects.equals(humanBeing.getMinutesOfWaiting(), minutesOfWaiting)).collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public void removeGreater(HumanBeing humanBeing) {
-//        humanCollection.removeIf(humanBeing1 -> humanBeing1.compareTo(humanBeing) > 0);
-//    }
-//
-//    @Override
-//    public HumanBeing get(int id) {
-//        return humanCollection.stream().filter(humanBeing -> humanBeing.getId() == id).findFirst().orElse(null);
-//    }
-//
-//    @Override
-//    public HumanBeing getHead(){
-//        return humanCollection.stream().findFirst().orElse(null);
-//    }
-//
-//    @Override
-//    public Collection<HumanBeing> getAll() {
-//        return humanCollection;
-//    }
-//
-//    @Override
-//    public int size() {
-//        return humanCollection.size();
-//    }
-//
-//    @Override
-//    public void setAvailableId() {
-//        int id;
-//        if (humanCollection.isEmpty()) {
-//            id = 0;
-//        } else {
-//            id = getMaxId();
-//        }
-//        availableId = id + 1;
-//    }
-//
-//    public int getMaxId(){
-//        ArrayDeque<HumanBeing> cloneCollection = humanCollection.clone();
-//        Integer[] ids = new Integer[cloneCollection.size()];
-//        int i = 0;
-//        int max;
-//        while (!(cloneCollection.isEmpty())) {
-//            ids[i] = cloneCollection.poll().getId();
-//            i++;
-//        }
-//        max = Collections.max(Arrays.asList(ids));
-//        return max;
-//    }
-//
-//    @Override
-//    public void save() {
-//        fileManager.writeCollection(humanCollection);
-//    }
-//
-//    @Override
-//    public String showCollection(){
-//        if (humanCollection.isEmpty()) return null;
-//        return humanCollection.stream().reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
-//    }
-//
-//    @Override
-//    public void sort() {
-//        HumanBeing[] humanBeingArray = humanCollection.toArray(new HumanBeing[0]);
-//        Arrays.sort(humanBeingArray, new ru.itmo.server.utility.HumanComparator());
-//        humanCollection.clear();
-//        humanCollection.addAll(Arrays.asList(humanBeingArray));
-//    }
+
+    public List<?> filterGreaterThanSpeed(int speed){
+        return humanCollection.stream().filter(
+                humanBeing -> humanBeing.getImpactSpeed() > speed).collect(Collectors.toList());
+    }
+
+    public HumanBeing getHead(){
+        return humanCollection.stream().findFirst().orElse(null);
+    }
+
+    private HumanBeing getLast() {
+        if(humanCollection.size() != 0) return humanCollection.getLast();
+        return null;
+    }
+
 }
