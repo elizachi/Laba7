@@ -2,6 +2,8 @@ package ru.itmo.server.collection.commands;
 
 import ru.itmo.server.collection.dao.DAO;
 
+import java.util.ArrayList;
+
 public class RemoveGreaterCommand implements Command{
     private final DAO arrayDequeDAO;
 
@@ -11,6 +13,14 @@ public class RemoveGreaterCommand implements Command{
 
     @Override
     public Object execute(Object arguments) {
-        return "Команда в разработке";
+        ArrayList<Integer> indexes = arrayDequeDAO.getAllSQL();
+        if (indexes.size() != 0) {
+            Object result = arrayDequeDAO.getSQL("id = ", indexes.get(indexes.size() - 1)).stream().
+                    reduce("", (sum, m) -> sum += m + "\n\n", (sum1, sum2) -> sum1 + sum2).trim();
+            arrayDequeDAO.deleteSQL(indexes.get(indexes.size() - 1));
+            return result;
+        } else {
+            return "Коллекция пустая.";
+        }
     }
 }
