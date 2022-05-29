@@ -1,6 +1,7 @@
 package ru.itmo.server.collection.commands;
 
 import ru.itmo.common.model.HumanBeing;
+import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class PrintUniqueSpeedCommand implements Command{
     @Override
-    public Object execute(Object arguments) {
+    public Response execute(Object arguments) {
         arguments = "";
         List<Integer> uniqueFieldsSpeed = new ArrayList<>();
         if (ArrayDequeDAO.getInstance().getAll().size() != 0) {
@@ -23,9 +24,9 @@ public class PrintUniqueSpeedCommand implements Command{
             for(Integer element: uniqueFieldsSpeed) {
                 arguments += element.toString() + "\n";
             }
-            return arguments;
+            return new Response(Response.Status.OK, "print_unique_impact_speed: "+arguments);
         } else {
-            return "Коллекция пустая.";
+            return new Response(Response.Status.WARNING, "print_unique_impact_speed: Коллекция пуста");
         }
     }
 }

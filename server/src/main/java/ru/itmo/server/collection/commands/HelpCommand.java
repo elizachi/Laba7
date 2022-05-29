@@ -1,9 +1,11 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.responses.Response;
+
 public class HelpCommand implements Command{
     @Override
-    public Object execute(Object arguments) {
-        return ("Доступные команды: \n" +
+    public Response execute(Object arguments) {
+        return new Response(Response.Status.OK, "help: Доступные команды: \n" +
                 "help                     - вывести справку по доступным командам \n" +
                 "info                     - вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.) \n" +
                 "show                     - вывести в стандартный поток вывода все элементы коллекции в строковом представлении  \n" +

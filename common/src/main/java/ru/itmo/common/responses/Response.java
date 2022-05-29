@@ -33,6 +33,7 @@ public class Response {
     public enum Status {
         OK,
         ERROR,
+        WARNING,
         SERVER_EXIT
     }
 }

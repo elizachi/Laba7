@@ -52,7 +52,6 @@ public class Client {
 
                 Response response = serverAPI.executeCommand(commandType, human);
                 if(response.status == Response.Status.OK) {
-                    System.out.println("Ура ура! Получилось! Команда успешно выполнена.");
                     if(response.getArgumentAs(String.class) != null) {
                         System.out.println(response.getArgumentAs(String.class));
                     }
@@ -62,6 +61,8 @@ public class Client {
                     run = false;
                 } else if(response.status == Response.Status.ERROR) {
                     System.err.println("В процессе выполнения данной команды произошла ошибка.");
+                } else if(response.status == Response.Status.WARNING) {
+                    System.out.println("Внимание! "+response.getArgumentAs(String.class));
                 }
             } catch (NullPointerException e) {
                 ReaderManager.returnOnPreviousReader();

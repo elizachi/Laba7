@@ -1,13 +1,21 @@
 package ru.itmo.server.collection.commands;
 
 import ru.itmo.common.model.HumanBeing;
+import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
+
+import java.util.List;
 
 public class FilterByMinutesCommand implements Command{
 
     @Override
-    public Object execute(Object arguments) {
+    public Response execute(Object arguments) {
         HumanBeing humanBeing = (HumanBeing) arguments;
-        return ArrayDequeDAO.getInstance().filterByMinutes(humanBeing.getMinutesOfWaiting()).toString();
+        List<?> minutes = ArrayDequeDAO.getInstance().filterByMinutes(humanBeing.getMinutesOfWaiting());
+
+        if(minutes.size() == 0) return new Response(Response.Status.WARNING,
+                "filter_by_minutes_of_waiting: Элементов со значением поля minutesOfWaiting = "
+                        + humanBeing.getMinutesOfWaiting()+" не нашлось");
+        return new Response(Response.Status.OK, "filter_by_minutes_of_waiting: "+minutes);
     }
 }

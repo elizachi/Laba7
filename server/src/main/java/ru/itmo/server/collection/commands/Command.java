@@ -1,5 +1,7 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.responses.Response;
+
 public interface Command {
-    Object execute(Object arguments);
+    Response execute(Object arguments);
 }
