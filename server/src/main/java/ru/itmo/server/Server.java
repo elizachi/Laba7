@@ -8,6 +8,7 @@ import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
 import ru.itmo.server.collection.dao.PostgreSqlDao;
 import ru.itmo.server.utility.HandleCommands;
+import ru.itmo.server.utility.HandleUsers;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -21,7 +22,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class Server {
-    private final HandleCommands commandManager = new HandleCommands();
+    private HandleUsers handleUsers = new HandleUsers();
+    private final HandleCommands commandManager = new HandleCommands(handleUsers);
     private Response response;
 
     private Selector selector;
@@ -38,6 +40,7 @@ public class Server {
     public void start() {
         if(!runSocketChannel()) return;
         PostgreSqlDao.setConnection();
+        HandleUsers.setConnection();
         ArrayDequeDAO.getInstance().setCollection(
                 new PostgreSqlDao().getAll()
         );

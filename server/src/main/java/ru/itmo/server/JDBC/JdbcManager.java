@@ -6,9 +6,9 @@ import java.sql.*;
 
 public class JdbcManager {
     private static final String JDBC_DRIVER = "org.postgresql.Driver";
-    private static final String url = "jdbc:postgresql://localhost:5433/postgres";
+    private static final String url = "jdbc:postgresql://localhost:5432/postgres";
     private static final String user = "postgres";
-    private static final String password = "Piqh-178_Laks";
+    private static final String password = "K1nd4database";
     private static Connection connect;
 
     /**
@@ -28,16 +28,17 @@ public class JdbcManager {
             ServerLauncher.log.fatal("Непредвиденная ошибка");
         }
         createTypes();
-        createTable();
+        createCollectionTable();
+        createUserTable();
         return connect;
     }
 
     /**
      * Создаёт новую таблицу (новый файл с коллекцией), если она ещё не существует
      */
-    private static void createTable() {
+    private static void createCollectionTable() {
         try {
-            ServerLauncher.log.info("Проверка таблицы...");
+            ServerLauncher.log.info("Проверка таблицы коллекции...");
             Statement stmt = connect.createStatement();
             // Создание типов данных для таблицы
             // Создает новую таблицу, если она ещё не существует
@@ -53,6 +54,20 @@ public class JdbcManager {
                     "coordinates Coordinates," +
                     "mood Mood," +
                     "car Car);");
+            ServerLauncher.log.info("Таблица успешно подключена");
+        } catch (SQLException e) {
+            ServerLauncher.log.error("Возникла проблема с подключением таблицы :(");
+        }
+    }
+
+    public static void createUserTable(){
+        try {
+            ServerLauncher.log.info("Проверка таблицы пользователей...");
+            Statement stmt = connect.createStatement();
+            // Создает новую таблицу, если она ещё не существует
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS USERS (" +
+                    "login TEXT NOT NULL," +
+                    "password TEXT NOT NULL);");
             ServerLauncher.log.info("Таблица успешно подключена");
         } catch (SQLException e) {
             ServerLauncher.log.error("Возникла проблема с подключением таблицы :(");

@@ -8,6 +8,7 @@ import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 public class AddCommand implements Command{
     private final DAO postgresqlDAO = new PostgreSqlDao();
+
     @Override
     public Response execute(Object arguments) {
         HumanBeing humanBeing = (HumanBeing) arguments;

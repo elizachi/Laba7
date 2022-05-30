@@ -1,6 +1,7 @@
 package ru.itmo.client.to_server;
 
 import ru.itmo.client.ClientLauncher;
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 import ru.itmo.common.exceptions.TypeOfError;
 import ru.itmo.common.exceptions.WrongArgumentException;
@@ -37,10 +38,11 @@ public class ServerAPIImpl implements ServerAPI {
     /**
      * Получает команду и данные для ее исполнения
      */
-    public Response executeCommand(CommandType command, HumanBeing human) throws WrongArgumentException {
+    public Response executeCommand(CommandType command, HumanBeing human, User user) throws WrongArgumentException {
         Request request = new Request(
                 command,
-                human
+                human,
+                user
         );
         try {
             return sendToServer(request);
@@ -49,11 +51,6 @@ public class ServerAPIImpl implements ServerAPI {
         } catch (IOException e) {
             throw new WrongArgumentException(TypeOfError.CONNECTED_REFUSE);
         }
-    }
-
-    @Override
-    public void closeConnection() {
-
     }
 
     /**

@@ -1,5 +1,6 @@
 package ru.itmo.server.utility;
 
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.requests.Request;
@@ -8,12 +9,18 @@ import ru.itmo.server.ServerLauncher;
 import ru.itmo.server.collection.commands.*;
 
 public class HandleCommands {
+    private static HandleUsers handleUsers;
 
-    public Response handleRequest(Request request) {
-        return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class));
+    public HandleCommands(HandleUsers handleUsers){
+        HandleCommands.handleUsers = handleUsers;
     }
 
-    private Response executeCommand(CommandType command, Object commandArgument){
+    public Response handleRequest(Request request) {
+        return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());
+    }
+
+    private Response executeCommand(CommandType command, Object commandArgument, User user){
+        //todo проверка пользователя
         int commandIndex = command.ordinal();
         Response response = commands[commandIndex].execute(commandArgument);
         ServerLauncher.log.info("Запрос успешно обработан");
@@ -38,5 +45,6 @@ public class HandleCommands {
             new RemoveHeadCommand(),
             new ShowCommand(),
             new UpdateCommand(),
+            new CheckUserCommand(handleUsers)
     };
 }

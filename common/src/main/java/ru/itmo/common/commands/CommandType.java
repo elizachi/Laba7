@@ -18,7 +18,7 @@ public enum CommandType {
     SHOW(new String[]{}),
     UPDATE(new String[]{"askId", "askName", "askSoundtrackName", "askMinutesOfWaiting",
             "askImpactSpeed", "askRealHero", "askHasToothpick", "askCoordinates", "askMood", "askCar"}),
-    EXECUTE_SCRIPT(new String[]{"askFileName"});
+    CHECK_USER(new String[]{"askNAme"});
 
     private final String[] commandFields;
 

@@ -7,8 +7,6 @@ import ru.itmo.server.collection.dao.PostgreSqlDao;
 
 public class InfoCommand implements Command{
 
-    private final DAO postgresqlDAO = new PostgreSqlDao();
-
     @Override
     public Response execute(Object arguments) {
         int size = ArrayDequeDAO.getInstance().getAll().size();

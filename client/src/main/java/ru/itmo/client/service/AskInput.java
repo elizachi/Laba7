@@ -1,6 +1,7 @@
 package ru.itmo.client.service;
 
 import ru.itmo.client.handlers.InputHandler;
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 import ru.itmo.common.exceptions.*;
 import ru.itmo.common.messages.MessageManager;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.rmi.NoSuchObjectException;
+import java.sql.Array;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -76,6 +79,79 @@ public class AskInput {
         newHuman.setCreationDate(LocalDate.now());
         return newHuman;
     }
+
+    /**
+     * Метод, спрашивающий, есть ли у пользователя аккаунт
+     * @param in InputHandler
+     * @return true (если аккаунт уже есть), false (если его нет)
+     */
+    public Boolean askAuthorization(InputHandler in){
+        String result;
+        Boolean booleanResult = false;
+        System.out.print("Есть ли у Вас аккаунт?\n");
+        try {
+            result = in.readInput();
+            if (result.equals("")) {
+                System.err.println("Пожалуйста, введите буквы с клавиатуры.");
+                askAuthorization(in);
+                return null;
+            }
+            booleanResult = toBoolean(result, false);
+        } catch (IOException | WrongArgumentException e) {
+            System.err.println("Вы что ввели такое....");
+        }
+        return booleanResult;
+    }
+
+    /**
+     * Спрашивает, создать ли новый аккаунт
+     * @return true / false
+     */
+    public Boolean askNewAccount(InputHandler in){
+        Boolean booleanResult = false;
+        System.out.println("Хотите создать новый?");
+        try {
+            String result = in.readInput();
+            if (result.equals("")) {
+                System.err.println("Пожалуйста, введите буквы с клавиатуры.");
+                askNewAccount(in);
+            }
+            booleanResult = toBoolean(result, false);
+        } catch (IOException | WrongArgumentException e) {
+            System.err.println("Вы что ввели такое....");
+        }
+        return booleanResult;
+    }
+
+    /**
+     * проверка наличия логина (получение списка всех логинов и сравнение поступившего логина со списком)
+     * @return true (если логин уже есть), false (если такого логина среди созданных нет)
+     */
+    public boolean checkUserLogin(InputHandler in, Array logins){
+        Authorization auth = new Authorization(in, msg);
+        return auth.checkLogin(logins);
+    }
+
+    public String askLogin(InputHandler in){
+        Authorization auth = new Authorization(in, msg);
+        return auth.askLogin();
+    }
+
+    public String askPassword(InputHandler in){
+        Authorization auth = new Authorization(in, msg);
+        return auth.askPassword();
+    }
+
+    public User repeatAuthorization(InputHandler in, String name) throws IOException {
+        Authorization auth = new Authorization(in, msg);
+        boolean constUser = false;
+        while (!constUser) {
+            constUser = auth.checkPassword(name);
+        }
+        //TODO что тут происходит. Почему юзер с именем в виде пароля? Как такое получилось вообще?
+        return new User(auth.getSavedString(), name);
+    }
+
     /**
      * Запрашивает ввод команды и валидирует введённую пользователем строку
      * @param in - тип считывания (с консоли или с файла)
@@ -318,6 +394,7 @@ public class AskInput {
             throw new WrongArgumentException(TypeOfError.UNKNOWN);
         }
     }
+
     private String isCorrectString(String input) throws WrongArgumentException {
         if(input.isEmpty()) throw new WrongArgumentException(TypeOfError.EMPTY);
         return input;
