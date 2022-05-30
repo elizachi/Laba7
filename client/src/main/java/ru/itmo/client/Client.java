@@ -119,7 +119,8 @@ public class Client {
             //если логин не найден
             if (checkedLogin == null) {
                 //вопрос, создать новый аккаунт или попробовать снова
-                user = tryAuthorize(checkedLogin);
+                //TODO вместо checkedLogin что-то другое передавать надо
+                user = tryAuthorize(serverAPI, checkedLogin);
             } else {
                 //если логин найден
                 //проверка пароля
@@ -131,10 +132,10 @@ public class Client {
         return user;
     }
 
-    private User tryAuthorize(String name){
+    private User tryAuthorize(ServerAPI serverAPI, String name){
         User user;
         if (ask.askNewAccount(ReaderManager.getHandler())) {
-            user = newLogin();
+            user = newLogin(serverAPI);
         } else {
             try {
                 user = ask.repeatAuthorization(ReaderManager.getHandler(), name);
@@ -174,7 +175,7 @@ public class Client {
             newLogin(serverAPI);
             return  null;
         }
-
+        //TODO аче откуда нейм брать?
         return new User(name, password);
     }
 }
