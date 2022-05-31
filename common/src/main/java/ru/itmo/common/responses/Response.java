@@ -33,6 +33,10 @@ public class Response {
         return new Gson().toJson(this);
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public enum Status {
         OK,
         ERROR,

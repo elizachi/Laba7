@@ -23,9 +23,7 @@ public class UserSQL {
         try {
             stmt = connection.createStatement();
             stmt.executeUpdate(sql);
-        } catch(PSQLException e) {
-            return null;
-        } catch(SQLException | NullPointerException e) {
+        } catch (SQLException | NullPointerException e) {
             return false;
         }
         return true;

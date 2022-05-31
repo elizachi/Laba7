@@ -12,7 +12,7 @@ public class HandleUsers {
     private final String GET_PASSWORD_COMMAND = "SELECT password FROM " + COLLECTION_NAME + " WHERE login = '";
     private static Connection connection;
 
-    public static void setConnection() {
+    public void setConnection() {
         connection = JdbcManager.connectToDataBase();
     }
 

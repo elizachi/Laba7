@@ -40,7 +40,7 @@ public class Server {
     public void start() {
         if(!runSocketChannel()) return;
         PostgreSqlDao.setConnection();
-        HandleUsers.setConnection();
+        handleUsers.setConnection();
         ArrayDequeDAO.getInstance().setCollection(
                 new PostgreSqlDao().getAll()
         );

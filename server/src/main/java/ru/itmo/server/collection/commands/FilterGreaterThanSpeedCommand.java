@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FilterGreaterThanSpeedCommand implements Command{
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         HumanBeing humanBeing = (HumanBeing) arguments;
         List<?> minutes = ArrayDequeDAO.getInstance().filterByMinutes(humanBeing.getMinutesOfWaiting());
 

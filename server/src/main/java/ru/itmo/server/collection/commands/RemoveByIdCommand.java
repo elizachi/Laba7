@@ -10,7 +10,7 @@ import ru.itmo.server.collection.dao.PostgreSqlDao;
 public class RemoveByIdCommand implements Command{
     private final DAO postgresqlDAO = new PostgreSqlDao();
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         HumanBeing humanBeing = (HumanBeing) arguments;
         int id = humanBeing.getId();
 

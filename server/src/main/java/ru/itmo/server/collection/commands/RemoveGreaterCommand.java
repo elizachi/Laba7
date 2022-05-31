@@ -8,7 +8,7 @@ import ru.itmo.server.collection.dao.ArrayDequeDAO;
 public class RemoveGreaterCommand implements Command{
 
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         HumanBeing human = ArrayDequeDAO.getInstance().removeLast();
         if(human != null) return new Response(Response.Status.OK, "remove_greater: "+human,new User("", ""));
         return new Response(Response.Status.WARNING, "remove_greater: Коллекция пуста", new User("", ""));

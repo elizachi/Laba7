@@ -12,20 +12,19 @@ public class CheckUserCommand implements Command{
     }
 
     @Override
-    public Response execute(Object arguments) {
-        User user = (User) arguments;
+    public Response execute(Object arguments, User user) {
         String login = user.getUsername();
         String password = User.getHash(user.getPassword());
 
         if (handleUsers.getLogin(login) == null) {
             User user1 = new User(null, password);
-            return new Response(Response.Status.ERROR, user1, user);
+            return new Response(Response.Status.ERROR, null, user1);
         } else if (handleUsers.getPassword(login) == null) {
             User user1 = new User(login, null);
-            return new Response(Response.Status.WRONG_PASSWORD, user1, user);
+            return new Response(Response.Status.WRONG_PASSWORD, null, user1);
         } else if (handleUsers.getLogin(login).equals(login) && handleUsers.getPassword(login).equals(password)) {
             User user1 = new User(login, password);
-            return new Response(Response.Status.OK, user1, user);
+            return new Response(Response.Status.OK, null, user1);
         }
 
         return new Response(Response.Status.WARNING, "Что-то пошло не так.", user);

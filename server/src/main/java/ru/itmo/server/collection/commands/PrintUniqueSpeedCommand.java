@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PrintUniqueSpeedCommand implements Command{
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         arguments = "";
         List<Integer> uniqueFieldsSpeed = new ArrayList<>();
         if (ArrayDequeDAO.getInstance().getAll().size() != 0) {

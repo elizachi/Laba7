@@ -5,7 +5,7 @@ import ru.itmo.common.responses.Response;
 
 public class HelpCommand implements Command{
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         return new Response(Response.Status.OK, "help: Доступные команды: \n" +
                 "help                     - вывести справку по доступным командам \n" +
                 "info                     - вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.) \n" +

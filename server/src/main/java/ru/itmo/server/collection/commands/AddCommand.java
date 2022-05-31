@@ -11,7 +11,7 @@ public class AddCommand implements Command{
     private final DAO postgresqlDAO = new PostgreSqlDao();
 
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         HumanBeing humanBeing = (HumanBeing) arguments;
         int id = postgresqlDAO.add(humanBeing);
 

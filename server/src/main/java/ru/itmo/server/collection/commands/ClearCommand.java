@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ClearCommand implements Command{
     private final PostgreSqlDao postgresqlDAO = new PostgreSqlDao();
     @Override
-    public Response execute(Object arguments) {
+    public Response execute(Object arguments, User user) {
         ArrayList<Integer> indexes = postgresqlDAO.getAllSQL();
         if (indexes.size() != 0) {
             for(int i : indexes) {

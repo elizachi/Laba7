@@ -153,7 +153,7 @@ public class Client {
     private User checkUser(ServerAPI serverAPI, User user) {
         try {
             Response response = serverAPI.executeCommand(CommandType.CHECK_USER, null, user);
-            return response.getArgumentAs(User.class);
+            return response.getUser();
         } catch (WrongArgumentException e) {
             msg.printErrorMessage(e);
         }
@@ -181,7 +181,7 @@ public class Client {
     private User registration(ServerAPI serverAPI, User user) {
         try {
             Response response = serverAPI.executeCommand(CommandType.REGISTRATION, null, user);
-            return response.getArgumentAs(User.class);
+            return response.getUser();
         } catch (WrongArgumentException e) {
             msg.printErrorMessage(e);
         }
