@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.responses.Response;
 
 public class HelpCommand implements Command{
@@ -20,6 +21,6 @@ public class HelpCommand implements Command{
                 "remove_greater           - вывести последний элемент коллекции и удалить его \n" +
                 "filter_by_minutes_of_waiting minutesOfWaiting - вывести элементы, значение поля minutesOfWaiting которых равно заданному \n" +
                 "filter_greater_than_impact_speed impactSpeed  - вывести элементы, значение поля impactSpeed которых больше заданного \n" +
-                "print_unique_impact_speed - вывести уникальные значения поля impactSpeed всех элементов в коллекции \n");
+                "print_unique_impact_speed - вывести уникальные значения поля impactSpeed всех элементов в коллекции \n",new User("", "") );
     }
 }

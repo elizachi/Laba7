@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
@@ -15,9 +16,9 @@ public class RemoveByIdCommand implements Command{
 
         if(postgresqlDAO.delete(id)) {
             ArrayDequeDAO.getInstance().delete(id);
-            return new Response(Response.Status.OK, "remove_by_id: Элемент с id = "+id+" успешно удалён");
+            return new Response(Response.Status.OK, "remove_by_id: Элемент с id = "+id+" успешно удалён",new User("", ""));
         } else {
-            return new Response(Response.Status.OK, "remove_by_id: Элемента с id = "+id+" не нашлось");
+            return new Response(Response.Status.OK, "remove_by_id: Элемента с id = "+id+" не нашлось", new User("", ""));
         }
     }
 }

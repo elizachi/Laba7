@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
 import ru.itmo.server.collection.dao.PostgreSqlDao;
@@ -15,13 +16,13 @@ public class ClearCommand implements Command{
             for(int i : indexes) {
                 if(!postgresqlDAO.delete(i)) {
                     return new Response(Response.Status.ERROR,
-                            "clear: В процессе очистки коллекции произошла ошибка");
+                            "clear: В процессе очистки коллекции произошла ошибка", new User("", ""));
                 }
             }
             ArrayDequeDAO.getInstance().clear();
-            return new Response(Response.Status.OK, "clear: Коллекция успешно очищена");
+            return new Response(Response.Status.OK, "clear: Коллекция успешно очищена", new User("", ""));
         } else {
-            return new Response(Response.Status.WARNING, "clear: Коллекция пуста");
+            return new Response(Response.Status.WARNING, "clear: Коллекция пуста", new User("", ""));
         }
     }
 }

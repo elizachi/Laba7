@@ -24,11 +24,14 @@ public class JdbcManager {
             ServerLauncher.log.info("Соединение с базой данных успешно установлено");
         } catch (ClassNotFoundException | SQLException e) {
             ServerLauncher.log.fatal("Файл с драйвером не обнаружен");
+            System.exit(0);
         } catch (Exception e) {
             ServerLauncher.log.fatal("Непредвиденная ошибка");
+            System.exit(0);
         }
         createTypes();
-        createTable();
+        createCollectionTable();
+        createUserTable();
         return connect;
     }
 

@@ -16,15 +16,17 @@ public class HandleCommands {
     }
 
     public Response handleRequest(Request request) {
-        return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());
+        if(request.getUser() != null) {
+            return executeCommand(request.getCommand(), request.getArgumentAs(User.class), request.getUser());
+        }
+        else {
+            return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());
+        }
     }
 
     private Response executeCommand(CommandType command, Object commandArgument, User user){
-        //todo проверка пользователя
         int commandIndex = command.ordinal();
-        //TODO поменять обратно
-//        Response response = commands[commandIndex].execute(commandArgument);
-        Response response = commands[commandIndex].execute(new User("Liza", "Check"));
+        Response response = commands[commandIndex].execute(commandArgument);
         ServerLauncher.log.info("Запрос успешно обработан");
         return response;
     }

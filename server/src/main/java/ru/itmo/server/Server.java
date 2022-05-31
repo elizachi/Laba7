@@ -71,7 +71,7 @@ public class Server {
                             //отправка респонза клиенту
                             write(key, commandManager.handleRequest(request));
                         } else {
-                            response = new Response(Response.Status.SERVER_EXIT, "Сервер завершает свою работу.");
+//                            response = new Response(Response.Status.SERVER_EXIT, "Сервер завершает свою работу.", user);
 //                            commandManager.exit();
                             work = false;
                         }

@@ -12,12 +12,12 @@ public class Registration implements Command{
         User newUser = (User) arguments;
         Boolean res = userManager.add(newUser);
         if(res == null) {
-            return new Response(Response.Status.ALREADY_EXIST, "Такой логин уже существует");
+            return new Response(Response.Status.ALREADY_EXIST, "Такой логин уже существует", new User("", ""));
         } else if(res) {
-            return new Response(Response.Status.OK, "Новый пользователь успешно добавленю Вы можете войти.");
+            return new Response(Response.Status.OK, "Новый пользователь успешно добавленю Вы можете войти.", new User("", ""));
         }
         else {
-            return new Response(Response.Status.ERROR, "Не удалось добавить нового пользователя.");
+            return new Response(Response.Status.ERROR, "Не удалось добавить нового пользователя.", new User("", ""));
         }
     }
 }
