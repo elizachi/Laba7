@@ -50,6 +50,6 @@ public class HandleCommands {
             new RemoveHeadCommand(),
             new ShowCommand(),
             new UpdateCommand(),
-            new CheckUserCommand(handleUsers)
+            new CheckUserCommand()
     };
 }

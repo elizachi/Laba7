@@ -1,10 +1,10 @@
 package ru.itmo.server.collection.dao;
 
-import org.postgresql.util.PSQLException;
 import ru.itmo.common.User;
 import ru.itmo.server.JDBC.JdbcManager;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -27,5 +27,31 @@ public class UserSQL {
             return false;
         }
         return true;
+    }
+
+    public Boolean search(User user) {
+        String sql = "SELECT login, password FROM USERS WHERE login = '" +user.getUsername()+ "' AND " +
+                " password = '" +User.getHash(user.getPassword()) + "'";
+        ResultSet result = sendToDataBaseQuery(sql);
+        try {
+            result.next();
+                String login = result.getString("login");
+                String password = result.getString("password");
+                return true;
+        } catch(SQLException | NullPointerException e) {
+            System.err.println("Бля");
+            return false;
+        }
+    }
+
+    private ResultSet sendToDataBaseQuery(String sql) {
+        ResultSet result = null;
+        try {
+            Statement stmt = connection.createStatement();
+            result = stmt.executeQuery(sql);
+        } catch(SQLException e) {
+            System.out.println("Случилась хуета");
+        }
+        return result;
     }
 }

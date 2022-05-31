@@ -147,7 +147,7 @@ public class Client {
 
     /**
      * Метод для проверки наличия логина в базе существующих логинов пользователей
-     * @return пароль пользователя (если логин уже есть) или null (если такого логина среди созданных нет)
+     * @return пользователя (если логин уже есть) или null (если такого логина среди созданных нет)
      * @throws WrongArgumentException
      */
     private User checkUser(ServerAPI serverAPI, User user) {

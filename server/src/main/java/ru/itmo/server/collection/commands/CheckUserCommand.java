@@ -2,31 +2,23 @@ package ru.itmo.server.collection.commands;
 
 import ru.itmo.common.User;
 import ru.itmo.common.responses.Response;
-import ru.itmo.server.utility.HandleUsers;
+import ru.itmo.server.collection.dao.UserSQL;
 
 public class CheckUserCommand implements Command{
-    private final HandleUsers handleUsers;
 
-    public CheckUserCommand(HandleUsers handleUsers){
-        this.handleUsers = handleUsers;
-    }
+    UserSQL userManager = new UserSQL();
 
     @Override
     public Response execute(Object arguments, User user) {
-        String login = user.getUsername();
-        String password = User.getHash(user.getPassword());
 
-        if (handleUsers.getLogin(login) == null) {
-            User user1 = new User(null, password);
-            return new Response(Response.Status.ERROR, null, user1);
-        } else if (handleUsers.getPassword(login) == null) {
-            User user1 = new User(login, null);
-            return new Response(Response.Status.WRONG_PASSWORD, null, user1);
-        } else if (handleUsers.getLogin(login).equals(login) && handleUsers.getPassword(login).equals(password)) {
-            User user1 = new User(login, password);
-            return new Response(Response.Status.OK, null, user1);
+        Boolean res = userManager.search(user);
+        if(res == null) {
+            return new Response(Response.Status.ERROR, "Произошла ошибка :(", new User(null, null));
+        } else if(res) {
+            return new Response(Response.Status.OK, "Авторизация прошла успешно", user);
         }
-
-        return new Response(Response.Status.WARNING, "Что-то пошло не так.", user);
+        else {
+            return new Response(Response.Status.WARNING, "Неверный логин, либо пароль", new User(null, null));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.dao;
 
+import ru.itmo.common.User;
 import ru.itmo.common.model.Car;
 import ru.itmo.common.model.Coordinates;
 import ru.itmo.common.model.HumanBeing;
@@ -31,12 +32,11 @@ public class PostgreSqlDao implements DAO{
     /**
      * override DAO methods
      */
-    // TODO разобраться с отправкой ответа на запрос
     @Override
-    public int add(HumanBeing humanBeing) {
+    public int add(HumanBeing humanBeing, User user) {
         int id = 0;
         String sql = ADD_COMMAND + "(creationDate, name, soundtrackName, minutesOfWaiting," +
-                " impactSpeed, realHero, hasToothpick, coordinates, mood, car) VALUES (" +
+                " impactSpeed, realHero, hasToothpick, coordinates, mood, car,  login) VALUES (" +
                 "TO_DATE('"+humanBeing.getCreationDate().toString() + "', 'YYYY/MM/DD'), '" +
                 humanBeing.getName() + "', '" +
                 humanBeing.getSoundtrackName() + "', '" +
@@ -46,7 +46,8 @@ public class PostgreSqlDao implements DAO{
                 convertToSQL(humanBeing.isHasToothpick()) + ", '(" +
                 humanBeing.getCoordinates().getX() +", " + humanBeing.getCoordinates().getY()+ ")', " +
                 convertToSQL(humanBeing.getMood()) + ", '(" +
-                humanBeing.getCar().getCarName() + ", " + humanBeing.getCar().getCarCool() + ")') " +
+                humanBeing.getCar().getCarName() + ", " + humanBeing.getCar().getCarCool() + ")'), " +
+                "'" + user.getUsername() + "' " +
                 "RETURNING id";
         try {
             ResultSet result = sendToDataBaseQuery(sql);

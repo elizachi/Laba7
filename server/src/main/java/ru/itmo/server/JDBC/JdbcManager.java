@@ -6,9 +6,9 @@ import java.sql.*;
 
 public class JdbcManager {
     private static final String JDBC_DRIVER = "org.postgresql.Driver";
-    private static final String url = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String url = "jdbc:postgresql://localhost:5433/postgres";
     private static final String user = "postgres";
-    private static final String password = "K1nd4database";
+    private static final String password = "Piqh-178_Laks";
     private static Connection connect;
 
     /**
@@ -55,7 +55,8 @@ public class JdbcManager {
                     "hasToothpick BOOLEAN," +
                     "coordinates Coordinates," +
                     "mood Mood," +
-                    "car Car);");
+                    "car Car," +
+                    "login TEXT NOT NULL references USERS(login));");
             ServerLauncher.log.info("Таблица успешно подключена");
         } catch (SQLException e) {
             ServerLauncher.log.error("Возникла проблема с подключением таблицы :(");
