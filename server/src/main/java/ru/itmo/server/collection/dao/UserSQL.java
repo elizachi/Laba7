@@ -14,7 +14,7 @@ public class UserSQL {
     public Boolean add(User user) {
         String sql = "INSERT INTO USERS (login, password) VALUES ('" +
                 user.getUsername() + "', '" +
-                user.getPassword() + "')";
+                User.getHash(user.getPassword()) + "')";
         return sendToDataBaseUpdate(sql);
     }
 
