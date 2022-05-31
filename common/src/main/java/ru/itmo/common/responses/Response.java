@@ -34,6 +34,7 @@ public class Response {
         OK,
         ERROR,
         WARNING,
-        SERVER_EXIT
+        SERVER_EXIT,
+        ALREADY_EXIST
     }
 }

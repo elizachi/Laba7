@@ -2,15 +2,18 @@ package ru.itmo.common.requests;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 
 public class Request {
     public final CommandType command;
     public final Object argument;
+    public final User user;
 
-    public Request(CommandType command, Object argument) {
+    public Request(CommandType command, Object argument, User user) {
         this.command = command;
         this.argument = new Gson().toJson(argument);
+        this.user = user;
     }
 
     public static Request fromJson(String json) {

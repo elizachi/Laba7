@@ -12,13 +12,15 @@ public enum CommandType {
     HELP(new String[]{}),
     INFO(new String[]{}),
     PRINT_UNIQUE_IMPACT_SPEED(new String[]{}),
+    REGISTRATION(new String[]{}),
     REMOVE_BY_ID(new String[]{"askId"}),
     REMOVE_GREATER(new String[]{}),
     REMOVE_HEAD(new String[]{}),
     SHOW(new String[]{}),
     UPDATE(new String[]{"askId", "askName", "askSoundtrackName", "askMinutesOfWaiting",
             "askImpactSpeed", "askRealHero", "askHasToothpick", "askCoordinates", "askMood", "askCar"}),
-    EXECUTE_SCRIPT(new String[]{"askFileName"});
+    EXECUTE_SCRIPT(new String[]{"askFileName"})
+    ;
 
     private final String[] commandFields;
 

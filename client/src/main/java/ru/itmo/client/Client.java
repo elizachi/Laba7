@@ -4,6 +4,7 @@ import ru.itmo.client.service.AskInput;
 import ru.itmo.client.service.ReaderManager;
 import ru.itmo.client.to_server.ServerAPI;
 import ru.itmo.client.to_server.ServerAPIImpl;
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 import ru.itmo.common.exceptions.TypeOfError;
 import ru.itmo.common.exceptions.WrongArgumentException;
@@ -50,7 +51,9 @@ public class Client {
                 CommandType commandType = ask.askCommand(ReaderManager.getHandler());
                 HumanBeing human = ask.askInputManager(commandType, ReaderManager.getHandler());
 
-                Response response = serverAPI.executeCommand(commandType, human);
+                Response response = serverAPI.executeCommand(
+                        CommandType.REGISTRATION, null, new User("Liza", "Check"));
+//                Response response = serverAPI.executeCommand(commandType, human);
                 if(response.status == Response.Status.OK) {
                     if(response.getArgumentAs(String.class) != null) {
                         System.out.println(response.getArgumentAs(String.class));

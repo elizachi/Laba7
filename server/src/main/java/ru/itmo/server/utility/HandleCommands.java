@@ -1,5 +1,6 @@
 package ru.itmo.server.utility;
 
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.requests.Request;
@@ -15,7 +16,9 @@ public class HandleCommands {
 
     private Response executeCommand(CommandType command, Object commandArgument){
         int commandIndex = command.ordinal();
-        Response response = commands[commandIndex].execute(commandArgument);
+        //TODO поменять обратно
+//        Response response = commands[commandIndex].execute(commandArgument);
+        Response response = commands[commandIndex].execute(new User("Liza", "Check"));
         ServerLauncher.log.info("Запрос успешно обработан");
         return response;
     }
@@ -33,6 +36,7 @@ public class HandleCommands {
             new HelpCommand(),
             new InfoCommand(),
             new PrintUniqueSpeedCommand(),
+            new Registration(),
             new RemoveByIdCommand(),
             new RemoveGreaterCommand(),
             new RemoveHeadCommand(),
