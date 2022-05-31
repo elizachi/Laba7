@@ -98,7 +98,7 @@ public class JdbcManager {
             Statement stmt = connect.createStatement();
             // Создает новую таблицу, если она ещё не существует
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS USERS (" +
-                    "login TEXT NOT NULL," +
+                    "login TEXT NOT NULL PRIMARY KEY," +
                     "password TEXT NOT NULL);");
             ServerLauncher.log.info("Таблица успешно подключена");
         } catch (SQLException e) {
