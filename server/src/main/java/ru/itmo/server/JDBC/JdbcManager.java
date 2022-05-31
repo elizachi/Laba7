@@ -29,6 +29,7 @@ public class JdbcManager {
         }
         createTypes();
         createTable();
+        createUserTable();
         return connect;
     }
 
@@ -89,6 +90,19 @@ public class JdbcManager {
             ServerLauncher.log.info("Тип данных Car успешно создан");
         } catch (SQLException e) {
             ServerLauncher.log.info("Тип данных Car уже создан");
+        }
+    }
+    public static void createUserTable(){
+        try {
+            ServerLauncher.log.info("Проверка таблицы пользователей...");
+            Statement stmt = connect.createStatement();
+            // Создает новую таблицу, если она ещё не существует
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS USERS (" +
+                    "login TEXT NOT NULL," +
+                    "password TEXT NOT NULL);");
+            ServerLauncher.log.info("Таблица успешно подключена");
+        } catch (SQLException e) {
+            ServerLauncher.log.error("Возникла проблема с подключением таблицы :(");
         }
     }
 }
