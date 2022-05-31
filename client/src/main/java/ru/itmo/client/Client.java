@@ -48,18 +48,12 @@ public class Client {
             }
         }
 
-        //вот тут происходит авторизация
-        User user = null;
-        while (user == null) {
-            user = userProcessing(serverAPI);
-        }
-
         while(run) {
             try {
                 CommandType commandType = ask.askCommand(ReaderManager.getHandler());
                 HumanBeing human = ask.askInputManager(commandType, ReaderManager.getHandler());
 
-                Response response = serverAPI.executeCommand(commandType, human, user);
+                Response response = serverAPI.executeCommand(commandType, human);
                 if(response.status == Response.Status.OK) {
                     if(response.getArgumentAs(String.class) != null) {
                         System.out.println(response.getArgumentAs(String.class));

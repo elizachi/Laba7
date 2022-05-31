@@ -22,7 +22,9 @@ public class HandleCommands {
     private Response executeCommand(CommandType command, Object commandArgument, User user){
         //todo проверка пользователя
         int commandIndex = command.ordinal();
-        Response response = commands[commandIndex].execute(commandArgument);
+        //TODO поменять обратно
+//        Response response = commands[commandIndex].execute(commandArgument);
+        Response response = commands[commandIndex].execute(new User("Liza", "Check"));
         ServerLauncher.log.info("Запрос успешно обработан");
         return response;
     }
@@ -40,6 +42,7 @@ public class HandleCommands {
             new HelpCommand(),
             new InfoCommand(),
             new PrintUniqueSpeedCommand(),
+            new Registration(),
             new RemoveByIdCommand(),
             new RemoveGreaterCommand(),
             new RemoveHeadCommand(),

@@ -35,6 +35,7 @@ public class Response {
         ERROR,
         WARNING,
         WRONG_PASSWORD,
-        SERVER_EXIT
+        SERVER_EXIT,
+        ALREADY_EXIST
     }
 }

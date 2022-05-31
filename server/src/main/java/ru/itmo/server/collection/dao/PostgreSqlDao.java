@@ -25,6 +25,9 @@ public class PostgreSqlDao implements DAO{
     public static void setConnection() {
         connection = JdbcManager.connectToDataBase();
     }
+    public static Connection getConnection() {
+        return connection;
+    }
     /**
      * override DAO methods
      */
