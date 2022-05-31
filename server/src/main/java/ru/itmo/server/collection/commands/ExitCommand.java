@@ -1,11 +1,12 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.responses.Response;
 
 public class ExitCommand implements Command{
 
     @Override
     public Response execute(Object arguments) {
-        return new Response(Response.Status.SERVER_EXIT, "exit: Завершение работы программы");
+        return new Response(Response.Status.SERVER_EXIT, "exit: Завершение работы программы", new User("", ""));
     }
 }

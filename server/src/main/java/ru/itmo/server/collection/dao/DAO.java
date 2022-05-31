@@ -6,4 +6,5 @@ public interface DAO {
     int add(HumanBeing humanBeing);
     boolean update(HumanBeing humanBeing);
     boolean delete(int index);
+    HumanBeing get(int id);
 }

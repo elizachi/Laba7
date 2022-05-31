@@ -16,11 +16,15 @@ public class HandleCommands {
     }
 
     public Response handleRequest(Request request) {
-        return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());
+        if(request.getUser() != null) {
+            return executeCommand(request.getCommand(), request.getArgumentAs(User.class), request.getUser());
+        }
+        else {
+            return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());
+        }
     }
 
     private Response executeCommand(CommandType command, Object commandArgument, User user){
-        //todo проверка пользователя
         int commandIndex = command.ordinal();
         Response response = commands[commandIndex].execute(commandArgument);
         ServerLauncher.log.info("Запрос успешно обработан");
@@ -40,6 +44,7 @@ public class HandleCommands {
             new HelpCommand(),
             new InfoCommand(),
             new PrintUniqueSpeedCommand(),
+            new Registration(),
             new RemoveByIdCommand(),
             new RemoveGreaterCommand(),
             new RemoveHeadCommand(),

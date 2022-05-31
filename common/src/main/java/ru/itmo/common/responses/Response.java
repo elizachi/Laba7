@@ -2,14 +2,17 @@ package ru.itmo.common.responses;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import ru.itmo.common.User;
 
 public class Response {
     public final Status status;
     public final Object argument;
+    public final User user;
 
-    public Response(Status status, Object argument) {
+    public Response(Status status, Object argument, User user) {
         this.status = status;
         this.argument = new Gson().toJson(argument);
+        this.user = user;
     }
 
 
@@ -35,6 +38,7 @@ public class Response {
         ERROR,
         WARNING,
         WRONG_PASSWORD,
-        SERVER_EXIT
+        SERVER_EXIT,
+        ALREADY_EXIST
     }
 }

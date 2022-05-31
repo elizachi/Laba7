@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
@@ -14,9 +15,9 @@ public class UpdateCommand implements Command{
 
         if(postgresqlDAO.update(humanBeing)) {
             ArrayDequeDAO.getInstance().update(humanBeing);
-            return new Response(Response.Status.OK, "Элемент с id = "+humanBeing.getId()+" успешно обновлён");
+            return new Response(Response.Status.OK, "Элемент с id = "+humanBeing.getId()+" успешно обновлён", new User("", ""));
         } else {
-            return new Response(Response.Status.WARNING, "Элемента с id = "+humanBeing.getId()+" не нашлось");
+            return new Response(Response.Status.WARNING, "Элемента с id = "+humanBeing.getId()+" не нашлось", new User("", ""));
         }
     }
 }

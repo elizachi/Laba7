@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
@@ -17,10 +18,10 @@ public class AddCommand implements Command{
         if(id != -1) {
             humanBeing.setId(id);
             return new Response(Response.Status.OK, "add: Элемент успешно добавлен в коллекцию, его id = "
-                    + ArrayDequeDAO.getInstance().add(humanBeing));
+                    + ArrayDequeDAO.getInstance().add(humanBeing), new User("", ""));
         }
         return new Response(Response.Status.ERROR,
-                "add: Возникли проблемы с добавлением элемента. Пожалуйста, проверьте, подключена ли база данных.");
+                "add: Возникли проблемы с добавлением элемента. Пожалуйста, проверьте, подключена ли база данных.", new User("", ""));
     }
 
 }

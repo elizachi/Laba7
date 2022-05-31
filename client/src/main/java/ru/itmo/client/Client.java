@@ -12,8 +12,6 @@ import ru.itmo.common.messages.MessageManager;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 
-import java.io.IOException;
-
 /**
  * Класс, содержащий основную логику работы клиента
  */
@@ -166,7 +164,7 @@ public class Client {
         String login = ask.askLogin(ReaderManager.getHandler());
         String password = ask.askPassword(ReaderManager.getHandler());
         User user = new User(login, password);
-        User user1 = checkUser(serverAPI, user);
+        User user1 = registration(serverAPI, user);
         if (user1 != null) {
             if (user1.getUsername() != null) {
                 System.err.println("Такой логин уже существует. Придумайте другой.");
@@ -178,5 +176,15 @@ public class Client {
             return null;
         }
         return user;
+    }
+
+    private User registration(ServerAPI serverAPI, User user) {
+        try {
+            Response response = serverAPI.executeCommand(CommandType.REGISTRATION, null, user);
+            return response.getArgumentAs(User.class);
+        } catch (WrongArgumentException e) {
+            msg.printErrorMessage(e);
+        }
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.commands;
 
+import ru.itmo.common.User;
 import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.collection.dao.ArrayDequeDAO;
@@ -24,9 +25,9 @@ public class PrintUniqueSpeedCommand implements Command{
             for(Integer element: uniqueFieldsSpeed) {
                 arguments += element.toString() + "\n";
             }
-            return new Response(Response.Status.OK, "print_unique_impact_speed: "+arguments);
+            return new Response(Response.Status.OK, "print_unique_impact_speed: "+arguments, new User("", ""));
         } else {
-            return new Response(Response.Status.WARNING, "print_unique_impact_speed: Коллекция пуста");
+            return new Response(Response.Status.WARNING, "print_unique_impact_speed: Коллекция пуста", new User("", ""));
         }
     }
 }
