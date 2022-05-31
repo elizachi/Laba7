@@ -114,7 +114,12 @@ public class Client {
      */
     private User userProcessing(ServerAPI serverAPI){
         User user = null;
-        boolean isAuthorized = ask.askAuthorization(ReaderManager.getHandler());
+
+        Boolean isAuthorized = null;
+        while (isAuthorized == null){
+            isAuthorized = ask.askAuthorization(ReaderManager.getHandler());
+        }
+
         if (isAuthorized) {
             //ввод логина
             String login = ask.askLogin(ReaderManager.getHandler());

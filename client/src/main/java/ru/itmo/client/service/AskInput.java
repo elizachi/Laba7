@@ -87,13 +87,12 @@ public class AskInput {
      */
     public Boolean askAuthorization(InputHandler in){
         String result;
-        Boolean booleanResult = false;
+        Boolean booleanResult = null;
         System.out.print("Есть ли у Вас аккаунт?\n");
         try {
             result = in.readInput();
             if (result.equals("")) {
                 System.err.println("Пожалуйста, введите буквы с клавиатуры.");
-                askAuthorization(in);
                 return null;
             }
             booleanResult = toBoolean(result, false);
