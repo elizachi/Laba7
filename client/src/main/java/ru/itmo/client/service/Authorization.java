@@ -2,6 +2,8 @@ package ru.itmo.client.service;
 
 import ru.itmo.client.handlers.InputHandler;
 import ru.itmo.common.User;
+import ru.itmo.common.exceptions.TypeOfError;
+import ru.itmo.common.exceptions.WrongArgumentException;
 import ru.itmo.common.messages.MessageManager;
 
 import java.sql.Array;
@@ -28,10 +30,10 @@ public class Authorization {
                 msg.printMessage(something);
                 System.out.print("> ");
                 result = in.readInput();
-                if (result.equals("")) throw new NullPointerException();
+                if (result.equals("")) throw new WrongArgumentException(TypeOfError.EMPTY);
                 break;
-            } catch (NullPointerException e) {
-                System.err.print(something + " не может быть пустым.\n");
+            } catch (WrongArgumentException e) {
+                msg.printErrorMessage(e);
             } catch (Exception e) {
                 System.err.print("Ошибо4ка...\n");
             }

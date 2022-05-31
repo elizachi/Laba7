@@ -1,7 +1,6 @@
 package ru.itmo.server.collection.commands;
 
 import ru.itmo.common.User;
-import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 import ru.itmo.server.utility.HandleUsers;
 
@@ -14,13 +13,21 @@ public class CheckUserCommand implements Command{
 
     @Override
     public Response execute(Object arguments) {
-        HumanBeing humanBeing = (HumanBeing) arguments;
-        String usersLogin = handleUsers.getLogin(humanBeing.getName());
-        if (usersLogin != null) {
-            User user = new User(usersLogin, handleUsers.getPassword(usersLogin));
-            return new Response(Response.Status.OK, user);
-        } else {
-            return new Response(Response.Status.ERROR, handleUsers.getLogins());
+        User user = (User) arguments;
+        String login = user.getUsername();
+        String password = User.getHash(user.getPassword());
+
+        if (handleUsers.getLogin(login) == null) {
+            User user1 = new User(null, password);
+            return new Response(Response.Status.ERROR, user1);
+        } else if (handleUsers.getPassword(login) == null) {
+            User user1 = new User(login, null);
+            return new Response(Response.Status.WRONG_PASSWORD, user1);
+        } else if (handleUsers.getLogin(login).equals(login) && handleUsers.getPassword(login).equals(password)) {
+            User user1 = new User(login, password);
+            return new Response(Response.Status.OK, user1);
         }
+
+        return new Response(Response.Status.WARNING, "Что-то пошло не так.");
     }
 }

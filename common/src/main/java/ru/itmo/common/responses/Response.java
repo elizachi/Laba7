@@ -34,6 +34,7 @@ public class Response {
         OK,
         ERROR,
         WARNING,
+        WRONG_PASSWORD,
         SERVER_EXIT
     }
 }

@@ -13,7 +13,6 @@ import ru.itmo.common.model.HumanBeing;
 import ru.itmo.common.responses.Response;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Класс, содержащий основную логику работы клиента
@@ -50,7 +49,10 @@ public class Client {
         }
 
         //вот тут происходит авторизация
-        User user = userProcessing(serverAPI);
+        User user = null;
+        while (user == null) {
+            user = userProcessing(serverAPI);
+        }
 
         while(run) {
             try {
@@ -112,37 +114,30 @@ public class Client {
      */
     private User userProcessing(ServerAPI serverAPI){
         User user = null;
-        boolean flag = true;
         boolean isAuthorized = ask.askAuthorization(ReaderManager.getHandler());
         if (isAuthorized) {
-            String checkedLogin = checkLogin(serverAPI);
-            //если логин не найден
-            if (checkedLogin == null) {
-                //вопрос, создать новый аккаунт или попробовать снова
-                //TODO вместо checkedLogin что-то другое передавать надо
-                user = tryAuthorize(serverAPI, checkedLogin);
-            } else {
-                //если логин найден
-                //проверка пароля
-                //TODO доделать
-            }
-        } else {
-            user = newLogin(serverAPI);
-        }
-        return user;
-    }
+            //ввод логина
+            String login = ask.askLogin(ReaderManager.getHandler());
+            //ввод пароля
+            String password = ask.askPassword(ReaderManager.getHandler());
+            //проверка на наличие такого юзера
+            user = new User(login, password);
+            User user1 = checkUser(serverAPI, user);
 
-    private User tryAuthorize(ServerAPI serverAPI, String name){
-        User user;
-        if (ask.askNewAccount(ReaderManager.getHandler())) {
-            user = newLogin(serverAPI);
-        } else {
-            try {
-                user = ask.repeatAuthorization(ReaderManager.getHandler(), name);
-            } catch (IOException e) {
-                msg.printErrorMessageIO();
-                user = null;
+            //обработка статуса
+            if (user1 != null) {
+                if (user1.getUsername() == null) {
+                    System.err.println("Аккаунт с данным логином не найден.");
+                    return null;
+                } else if (user1.getPassword() == null){
+                    System.err.println("Пароль введен неверно.");
+                    return null;
+                } else {
+                    return user;
+                }
             }
+        } else {
+            user = newLogin(serverAPI);
         }
         return user;
     }
@@ -152,30 +147,31 @@ public class Client {
      * @return пароль пользователя (если логин уже есть) или null (если такого логина среди созданных нет)
      * @throws WrongArgumentException
      */
-    private String checkLogin(ServerAPI serverAPI) {
-        HumanBeing human = null;
+    private User checkUser(ServerAPI serverAPI, User user) {
         try {
-            human = ask.askInputManager(CommandType.CHECK_USER, ReaderManager.getHandler());
-            User user = new User(human.getName(), null);
-            Response response = serverAPI.executeCommand(CommandType.CHECK_USER, human, user);
-            if (response.status == Response.Status.OK) {
-                return response.getArgumentAs(String.class);
-            }
+            Response response = serverAPI.executeCommand(CommandType.CHECK_USER, null, user);
+            return response.getArgumentAs(User.class);
         } catch (WrongArgumentException e) {
             msg.printErrorMessage(e);
         }
         return null;
     }
 
-    private User newLogin(ServerAPI serverAPI){
-        if (checkLogin(serverAPI) == null) {
-            String password = ask.askPassword(ReaderManager.getHandler());
+    private User newLogin(ServerAPI serverAPI) {
+        String login = ask.askLogin(ReaderManager.getHandler());
+        String password = ask.askPassword(ReaderManager.getHandler());
+        User user = new User(login, password);
+        User user1 = checkUser(serverAPI, user);
+        if (user1 != null) {
+            if (user1.getUsername() != null) {
+                System.err.println("Такой логин уже существует. Придумайте другой.");
+                newLogin(serverAPI);
+                return null;
+            }
         } else {
-            System.err.println("Такой логин уже существует. Придумайте другой.");
-            newLogin(serverAPI);
-            return  null;
+            System.err.println("Произошла какая-то ошибка.");
+            return null;
         }
-        //TODO аче откуда нейм брать?
-        return new User(name, password);
+        return user;
     }
 }
