@@ -18,6 +18,7 @@ public class HumanBeing implements Comparable {
     private Coordinates coordinates; //Поле не может быть null
     private Mood mood; //Поле может быть null
     private Car car; //Поле не может быть null
+    private String userLogin;
 
     public HumanBeing(){}
 
@@ -123,6 +124,14 @@ public class HumanBeing implements Comparable {
         return car;
     }
 
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
+    }
+
     /**
      * переобределение метода compareTo для сортировки
      * первое поле, по которому происходит сортировка - coordinates
@@ -173,6 +182,7 @@ public class HumanBeing implements Comparable {
     public String toString() {
         return "id = " + id +
                 ",\ncreationDate = " + creationDate +
+                ",\nuser = " + userLogin +
                 ",\nname = " + name +
                 ",\nsoundtrackName = " + soundtrackName +
                 ",\nminutesOfWaiting = " + minutesOfWaiting +

@@ -56,18 +56,6 @@ public class HandleUsers {
         return result;
     }
 
-//    для удаления замусоренной таблицы с юзерами
-//
-//    public void deleteTable(){
-//        String sql = "DROP TABLE " + COLLECTION_NAME + ";";
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.execute(sql);
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//    }
-
     public Array getLogins(){
         Array result = null;
         String sql = GET_LOGIN_COMMAND;

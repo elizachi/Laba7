@@ -56,7 +56,7 @@ public class JdbcManager {
                     "coordinates Coordinates," +
                     "mood Mood," +
                     "car Car," +
-                    "login TEXT NOT NULL references USERS(login));");
+                    "login TEXT NOT NULL);");
             ServerLauncher.log.info("Таблица успешно подключена");
         } catch (SQLException e) {
             ServerLauncher.log.error("Возникла проблема с подключением таблицы :(");
@@ -101,7 +101,7 @@ public class JdbcManager {
             Statement stmt = connect.createStatement();
             // Создает новую таблицу, если она ещё не существует
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS USERS (" +
-                    "login TEXT NOT NULL PRIMARY KEY," +
+                    "login TEXT NOT NULL," +
                     "password TEXT NOT NULL);");
             ServerLauncher.log.info("Таблица успешно подключена");
         } catch (SQLException e) {

@@ -11,4 +11,5 @@ public interface ServerAPI {
     Response executeCommand(CommandType command, HumanBeing human, User user) throws WrongArgumentException;
     boolean connectToServer();
     int getAttempts();
+    void closeConnection();
 }

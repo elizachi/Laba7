@@ -13,8 +13,8 @@ public class UpdateCommand implements Command{
     public Response execute(Object arguments, User user) {
         HumanBeing humanBeing = (HumanBeing) arguments;
 
-        if(postgresqlDAO.update(humanBeing)) {
-            ArrayDequeDAO.getInstance().update(humanBeing);
+        if(postgresqlDAO.update(humanBeing, user)) {
+            ArrayDequeDAO.getInstance().update(humanBeing, user);
             return new Response(Response.Status.OK, "Элемент с id = "+humanBeing.getId()+" успешно обновлён", new User("", ""));
         } else {
             return new Response(Response.Status.WARNING, "Элемента с id = "+humanBeing.getId()+" не нашлось", new User("", ""));

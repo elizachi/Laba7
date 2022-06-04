@@ -1,5 +1,6 @@
 package ru.itmo.server.collection.dao;
 
+import ru.itmo.common.User;
 import ru.itmo.common.model.HumanBeing;
 
 import java.util.*;
@@ -28,15 +29,15 @@ public class ArrayDequeDAO implements DAO{
      */
 
     @Override
-    public int add(HumanBeing human) {
+    public int add(HumanBeing human, User user) {
         humanCollection.add(human);
         return human.getId();
     }
 
     @Override
-    public boolean update(HumanBeing humanBeing) {
+    public boolean update(HumanBeing humanBeing, User user) {
         HumanBeing existedHuman = get(humanBeing.getId());
-        if(existedHuman != null) {
+        if(existedHuman != null && Objects.equals(humanBeing.getUserLogin(), user.getUsername())) {
             existedHuman.setName(humanBeing.getName());
             existedHuman.setSoundtrackName(humanBeing.getSoundtrackName());
             existedHuman.setMinutesOfWaiting(humanBeing.getMinutesOfWaiting());
@@ -55,9 +56,9 @@ public class ArrayDequeDAO implements DAO{
         return humanCollection.stream().filter(humanBeing -> humanBeing.getId() == id).findFirst().orElse(null);
     }
     @Override
-    public boolean delete(int index) {
+    public boolean delete(int index, User user) {
         HumanBeing existedHuman = get(index);
-        if(existedHuman != null) {
+        if(existedHuman != null && (Objects.equals(existedHuman.getUserLogin(), user.getUsername()))) {
             humanCollection.remove(existedHuman);
             return true;
         }
@@ -78,20 +79,26 @@ public class ArrayDequeDAO implements DAO{
                 humanBeing.getMinutesOfWaiting(), minutesOfWaiting)).collect(Collectors.toList());
     }
 
-    public void clear() {
+    public void clear(User user) {
         if(humanCollection == null) return;
-        humanCollection.clear();
+        for (HumanBeing humanBeing : humanCollection) {
+                delete(humanBeing.getId(), user);
+        }
     }
 
-    public HumanBeing removeHead() {
+    public HumanBeing removeHead(User user) {
         HumanBeing firstHuman = getHead();
-        if(firstHuman != null) humanCollection.removeFirst();
-        return firstHuman;
+        if (firstHuman != null && firstHuman.getUserLogin().equals(user.getUsername())) {
+            humanCollection.removeFirst();
+            return firstHuman;
+        } else {
+            return null;
+        }
     }
 
-    public HumanBeing removeLast() {
+    public HumanBeing removeLast(User user) {
         HumanBeing lastHuman = getLast();
-        if(lastHuman != null) humanCollection.removeLast();
+        if(lastHuman != null && lastHuman.getUserLogin() == user.getUsername()) humanCollection.removeLast();
         return lastHuman;
     }
 

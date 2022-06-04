@@ -13,12 +13,13 @@ public class AddCommand implements Command{
     @Override
     public Response execute(Object arguments, User user) {
         HumanBeing humanBeing = (HumanBeing) arguments;
-        int id = postgresqlDAO.add(humanBeing);
+        int id = postgresqlDAO.add(humanBeing, user);
 
         if(id != -1) {
             humanBeing.setId(id);
+            humanBeing.setUserLogin(user.getUsername());
             return new Response(Response.Status.OK, "add: Элемент успешно добавлен в коллекцию, его id = "
-                    + ArrayDequeDAO.getInstance().add(humanBeing), new User("", ""));
+                    + ArrayDequeDAO.getInstance().add(humanBeing, user), new User("", ""));
         }
         return new Response(Response.Status.ERROR,
                 "add: Возникли проблемы с добавлением элемента. Пожалуйста, проверьте, подключена ли база данных.", new User("", ""));

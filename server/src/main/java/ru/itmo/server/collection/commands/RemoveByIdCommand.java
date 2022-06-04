@@ -14,11 +14,11 @@ public class RemoveByIdCommand implements Command{
         HumanBeing humanBeing = (HumanBeing) arguments;
         int id = humanBeing.getId();
 
-        if(postgresqlDAO.delete(id)) {
-            ArrayDequeDAO.getInstance().delete(id);
+        if(postgresqlDAO.delete(id, user)) {
+            ArrayDequeDAO.getInstance().delete(id, user);
             return new Response(Response.Status.OK, "remove_by_id: Элемент с id = "+id+" успешно удалён",new User("", ""));
         } else {
-            return new Response(Response.Status.OK, "remove_by_id: Элемента с id = "+id+" не нашлось", new User("", ""));
+            return new Response(Response.Status.OK, "remove_by_id: Элемента с id = "+id+" не нашлось либо элемент был создан другим пользователем", new User("", ""));
         }
     }
 }

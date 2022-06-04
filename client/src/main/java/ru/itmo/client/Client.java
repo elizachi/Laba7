@@ -64,7 +64,7 @@ public class Client {
                     }
                 } else if(response.status == Response.Status.SERVER_EXIT) {
                     System.out.println("Клиент завершает свою работу.");
-//                    serverAPI.closeConnection();
+                    serverAPI.closeConnection();
                     run = false;
                 } else if(response.status == Response.Status.ERROR) {
                     System.err.println("В процессе выполнения данной команды произошла ошибка.");

@@ -1,5 +1,6 @@
 package ru.itmo.server;
 
+import ru.itmo.common.User;
 import ru.itmo.common.commands.CommandType;
 import ru.itmo.common.exceptions.TypeOfError;
 import ru.itmo.common.exceptions.WrongArgumentException;
@@ -71,9 +72,10 @@ public class Server {
                             //отправка респонза клиенту
                             write(key, commandManager.handleRequest(request));
                         } else {
-//                            response = new Response(Response.Status.SERVER_EXIT, "Сервер завершает свою работу.", user);
+                            response = new Response(Response.Status.SERVER_EXIT, "Клиент завершает свою работу.", new User("",""));
+                            write(key, response);
 //                            commandManager.exit();
-                            work = false;
+//                            work = false;
                         }
                     }
                 }

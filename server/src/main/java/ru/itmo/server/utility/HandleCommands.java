@@ -17,7 +17,7 @@ public class HandleCommands {
 
     public Response handleRequest(Request request) {
         if(request.getUser() != null) {
-            return executeCommand(request.getCommand(), request.getArgumentAs(User.class), request.getUser());
+            return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());
         }
         else {
             return executeCommand(request.getCommand(), request.getArgumentAs(HumanBeing.class), request.getUser());

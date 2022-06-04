@@ -46,8 +46,8 @@ public class PostgreSqlDao implements DAO{
                 convertToSQL(humanBeing.isHasToothpick()) + ", '(" +
                 humanBeing.getCoordinates().getX() +", " + humanBeing.getCoordinates().getY()+ ")', " +
                 convertToSQL(humanBeing.getMood()) + ", '(" +
-                humanBeing.getCar().getCarName() + ", " + humanBeing.getCar().getCarCool() + ")'), " +
-                "'" + user.getUsername() + "' " +
+                humanBeing.getCar().getCarName() + ", " + humanBeing.getCar().getCarCool() + ")', " +
+                "'" + user.getUsername() + "') " +
                 "RETURNING id";
         try {
             ResultSet result = sendToDataBaseQuery(sql);
@@ -59,7 +59,7 @@ public class PostgreSqlDao implements DAO{
         return id;
     }
     @Override
-    public boolean update(HumanBeing humanBeing) {
+    public boolean update(HumanBeing humanBeing, User user) {
         String sql = null;
         if(getSQL("id = ", humanBeing.getId()) != null) {
             sql = UPDATE_COMMAND + "name = '" + humanBeing.getName() + "' ," +
@@ -73,17 +73,17 @@ public class PostgreSqlDao implements DAO{
                     "mood = " + convertToSQL(humanBeing.getMood()) + ", " +
                     "car = '(" + humanBeing.getCar().getCarName() + ", " +
                     humanBeing.getCar().getCarCool() + ")' WHERE " +
-                    "id = " + humanBeing.getId();
+                    "id = " + humanBeing.getId() + " AND login = '" + user.getUsername() + "'";
         }
         return sendToDataBaseUpdate(sql);
     }
 
     @Override
-    public boolean delete(int index) {
+    public boolean delete(int index, User user) {
         String sql = null;
         if(get(index) != null) {
             sql = DELETE_COMMAND + " WHERE " +
-                    "id = " + index;
+                    "id = " + index + " AND login = '" + user.getUsername() + "'";
         }
         return sendToDataBaseUpdate(sql);
     }
@@ -105,7 +105,8 @@ public class PostgreSqlDao implements DAO{
                         "hasToothpick = " + result.getString("hasToothpick") +"\n"+
                         "coordinates = " + result.getObject("coordinates") +"\n"+
                         "mood = " + result.getObject("mood") +"\n"+
-                        "car = " + result.getObject("car") +"\n";
+                        "car = " + result.getObject("car") +"\n"+
+                        "login = " + result.getString("login");
                 rows.add(row);
             }
         } catch (SQLException e) {
@@ -118,9 +119,11 @@ public class PostgreSqlDao implements DAO{
         Deque<HumanBeing> humanCollection = new ConcurrentLinkedDeque<>();
         ResultSet result = sendToDataBaseQuery(GET_ID);
         try {
-            while(result.next()) {
-                int index = result.getInt("id");
-                humanCollection.add(get(index));
+            if (result!=null) {
+                while (result.next()) {
+                    int index = result.getInt("id");
+                    humanCollection.add(get(index));
+                }
             }
         } catch (SQLException e) {
             System.out.println("Бляяяяя проблема появилась :(");
@@ -146,6 +149,7 @@ public class PostgreSqlDao implements DAO{
                          getCar(result.getObject("car")));
                 human.setId(result.getInt("id"));
                 human.setCreationDate(result.getDate("creationDate").toLocalDate());
+                human.setUserLogin(result.getString("login"));
             }
         } catch (SQLException e) {
             System.out.println("Случилась еще одна хуета");

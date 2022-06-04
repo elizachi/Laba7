@@ -20,9 +20,8 @@ public class ServerTest {
     private HumanBeing returnHuman() {
         Coordinates coord = new Coordinates(5, 5F);
         Car car = new Car("name", false);
-        HumanBeing human = new HumanBeing("name", "soundtrackName", 5L, 5,
+        return new HumanBeing("name", "soundtrackName", 5L, 5,
         false, false, coord, Mood.RAGE, car);
-        return human;
     }
 
     @Before

@@ -108,4 +108,16 @@ public class ServerAPIImpl implements ServerAPI {
         }
         return true;
     }
+
+    /**
+     * Завершение подключения клиента к серверу
+     */
+    @Override
+    public void closeConnection() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
