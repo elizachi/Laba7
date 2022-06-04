@@ -102,35 +102,6 @@ public class AskInput {
         return booleanResult;
     }
 
-    /**
-     * Спрашивает, создать ли новый аккаунт
-     * @return true / false
-     */
-    public Boolean askNewAccount(InputHandler in){
-        Boolean booleanResult = false;
-        System.out.println("Хотите создать новый?");
-        try {
-            String result = in.readInput();
-            if (result.equals("")) {
-                System.err.println("Пожалуйста, введите буквы с клавиатуры.");
-                askNewAccount(in);
-            }
-            booleanResult = toBoolean(result, false);
-        } catch (IOException | WrongArgumentException e) {
-            System.err.println("Вы что ввели такое....");
-        }
-        return booleanResult;
-    }
-
-    /**
-     * проверка наличия логина (получение списка всех логинов и сравнение поступившего логина со списком)
-     * @return true (если логин уже есть), false (если такого логина среди созданных нет)
-     */
-    public boolean checkUserLogin(InputHandler in, Array logins){
-        Authorization auth = new Authorization(in, msg);
-        return auth.checkLogin(logins);
-    }
-
     public String askLogin(InputHandler in){
         Authorization auth = new Authorization(in, msg);
         return auth.askLogin();
@@ -139,16 +110,6 @@ public class AskInput {
     public String askPassword(InputHandler in){
         Authorization auth = new Authorization(in, msg);
         return auth.askPassword();
-    }
-
-    public User repeatAuthorization(InputHandler in, String name) throws IOException {
-        Authorization auth = new Authorization(in, msg);
-        boolean constUser = false;
-        while (!constUser) {
-            constUser = auth.checkPassword(name);
-        }
-        //TODO что тут происходит. Почему юзер с именем в виде пароля? Как такое получилось вообще?
-        return new User(auth.getSavedString(), name);
     }
 
     /**

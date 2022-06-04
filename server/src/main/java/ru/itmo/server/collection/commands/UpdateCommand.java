@@ -14,8 +14,9 @@ public class UpdateCommand implements Command{
         HumanBeing humanBeing = (HumanBeing) arguments;
 
         if(postgresqlDAO.update(humanBeing, user)) {
-            ArrayDequeDAO.getInstance().update(humanBeing, user);
-            return new Response(Response.Status.OK, "Элемент с id = "+humanBeing.getId()+" успешно обновлён", new User("", ""));
+            if (ArrayDequeDAO.getInstance().update(humanBeing, user)) {
+                return new Response(Response.Status.OK, "Элемент с id = " + humanBeing.getId() + " успешно обновлён", new User("", ""));
+            } else return new Response(Response.Status.WARNING, "Элемент с id = "+humanBeing.getId()+" был добавлен другим пользователем, обновить не получилось", new User("", ""));
         } else {
             return new Response(Response.Status.WARNING, "Элемента с id = "+humanBeing.getId()+" не нашлось", new User("", ""));
         }

@@ -18,7 +18,8 @@ public class RemoveGreaterCommand implements Command{
         if (postgresqlDAO.delete(index, user)) {
             HumanBeing human = ArrayDequeDAO.getInstance().removeLast(user);
             if (human != null) return new Response(Response.Status.OK, "remove_greater: " + human, new User("", ""));
+            else return new Response(Response.Status.WARNING, "remove_greater: Коллекция пуста или элемент был добавлен другим пользователем", new User("", ""));
         }
-        return new Response(Response.Status.WARNING, "remove_greater: Коллекция пуста или элемент был добавлен другим пользователем", new User("", ""));
+        return new Response(Response.Status.ERROR, "remove_greater: Произошла ошибка при удалении элемента", new User("", ""));
     }
 }

@@ -6,9 +6,9 @@ import java.sql.*;
 
 public class JdbcManager {
     private static final String JDBC_DRIVER = "org.postgresql.Driver";
-    private static final String url = "jdbc:postgresql://localhost:5433/postgres";
+    private static final String url = "jdbc:postgresql://localhost:5432/postgres";
     private static final String user = "postgres";
-    private static final String password = "Piqh-178_Laks";
+    private static final String password = "K1nd4database";
     private static Connection connect;
 
     /**

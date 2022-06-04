@@ -18,7 +18,7 @@ public class RemoveHeadCommand implements Command {
         int index = indexes.get(0);
         if (postgresqlDAO.delete(index, user)) {
             HumanBeing human = ArrayDequeDAO.getInstance().removeHead(user);
-            return new Response(Response.Status.OK, "remove_head: " + human, new User("", ""));
+            if (human != null) return new Response(Response.Status.OK, "remove_head: " + human, new User("", ""));
         }
         return new Response(Response.Status.WARNING, "remove_head: Коллекция пуста либо элемент был добавлен другим пользователем", new User("", ""));
     }

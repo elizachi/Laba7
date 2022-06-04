@@ -98,8 +98,11 @@ public class ArrayDequeDAO implements DAO{
 
     public HumanBeing removeLast(User user) {
         HumanBeing lastHuman = getLast();
-        if(lastHuman != null && lastHuman.getUserLogin() == user.getUsername()) humanCollection.removeLast();
-        return lastHuman;
+        if(lastHuman != null && lastHuman.getUserLogin() == user.getUsername()) {
+            humanCollection.removeLast();
+            return lastHuman;
+        }
+        return null;
     }
 
     public List<?> filterGreaterThanSpeed(int speed){

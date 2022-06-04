@@ -130,7 +130,7 @@ public class Client {
             //обработка статуса
             if (user1 != null) {
                 if (user1.getUsername() == null) {
-                    System.err.println("Аккаунт с данным логином не найден.");
+                    System.err.println("Аккаунт с данными логином и паролем не найден. Пожалуйста, проверьте правильность ввода и попробуйте еще раз.");
                     return null;
                 } else if (user1.getPassword() == null){
                     System.err.println("Пароль введен неверно.");
