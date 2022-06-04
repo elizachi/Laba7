@@ -36,12 +36,12 @@ public class User {
     /**
      * Метод для хеширования
      * @param word слово для хеширования
-     * @return хешированное слово по стандарту SHA-1
+     * @return хешированное слово по стандарту SHA-224
      */
     public static String getHash(String word) {
         MessageDigest mD = null;
         try {
-            mD = MessageDigest.getInstance("SHA-1");
+            mD = MessageDigest.getInstance("SHA-224");
         } catch (Exception e) {
             System.err.println("Проблемы с хешированием данных.");
         }
