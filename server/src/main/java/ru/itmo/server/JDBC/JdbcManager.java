@@ -5,10 +5,11 @@ import ru.itmo.server.ServerLauncher;
 import java.sql.*;
 
 public class JdbcManager {
-    private static final String JDBC_DRIVER = "org.postgresql.Driver";
-    private static final String url = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String user = "postgres";
-    private static final String password = "K1nd4database";
+    private static final StorageReader storageReader = new StorageReader();
+    private static final String JDBC_DRIVER = storageReader.getDriver();
+    private static final String url = storageReader.getURL();
+    private static final String user = storageReader.getUserName();
+    private static final String password = storageReader.getPassword();
     private static Connection connect;
 
     /**
